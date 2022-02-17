@@ -1,17 +1,16 @@
 <template>
-  <app-header></app-header>
-  <user-page></user-page>
+  <div id="nav">
+    <router-link to="/">Home</router-link> |
+    <router-link to="/album">Album</router-link> |
+    <router-link to="/post">Post</router-link> |
+    <router-link to="/user">User</router-link>
+  </div>
+  <router-view></router-view>
 </template>
 
 <script>
-import AppHeader from './pages/User/components/AppHeader.vue'
-import UserPage from './pages/User/UserPage.vue'
 export default {
-  name: 'App',
-  components: {
-    AppHeader,
-    UserPage,
-  }
+  name: 'App'
 }
 </script>
 
