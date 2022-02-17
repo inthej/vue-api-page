@@ -1,5 +1,5 @@
 <template>
-  <div>Photo</div>
+  <div>Photo Detail</div>
 </template>
 
 <script>

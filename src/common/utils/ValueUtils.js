@@ -4,7 +4,7 @@ export default class ValueUtils {
   }
 
   static empty(str, includeBlank = true) {
-    const empty = (str === undefined || str === null || (includeBlank && str === ''))
+    const empty = str === undefined || str === null || (includeBlank && str === '')
     return empty
   }
 
