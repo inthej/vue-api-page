@@ -17,6 +17,21 @@ export default class PostService {
     }
   }
 
+  async detailList() {
+    try {
+      let responseModel = await this.list()
+      const comments = await this.comments()
+      responseModel = responseModel.map(post => ({
+        ...post,
+        comments: comments.filter(comment => comment.postId === post.id)
+      }))
+      return responseModel
+    } catch (err) {
+      LogUtils.debug('PostService.detailList', err)
+      throw err
+    }
+  }
+
   async get(id) {
     try {
       const path = `${this.apiUrl}/posts/${id}`
@@ -30,7 +45,7 @@ export default class PostService {
 
   async detail(id) {
     try {
-      const comments = await this.comments(id)
+      const comments = await this.postComments(id)
       let responseModel = await this.get(id)
       responseModel = {
         ...responseModel,
@@ -43,13 +58,24 @@ export default class PostService {
     }
   }
 
-  async comments(id) {
+  async comments() {
+    try {
+      const path = `${this.apiUrl}/comments`
+      const responseModel = await axios.get(path)
+      return responseModel.data
+    } catch (err) {
+      LogUtils.debug('PostService.comments', err)
+      throw err
+    }
+  }
+
+  async postComments(id) {
     try {
       const path = `${this.apiUrl}/posts/${id}/comments`
       const responseModel = await axios.get(path)
       return responseModel.data
     } catch (err) {
-      LogUtils.debug('PostService.comments', err)
+      LogUtils.debug('PostService.postComments', err)
       throw err
     }
   }

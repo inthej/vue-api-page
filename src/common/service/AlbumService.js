@@ -17,6 +17,20 @@ export default class AlbumService {
     }
   }
 
+  async detailList() {
+    try {
+      let responseModel = await this.list()
+      const photos = await this.photos()
+      responseModel = responseModel.map(album => ({
+        ...album,
+        photos: photos.filter(photo => photo.albumId === album.id)
+      }))
+      return responseModel
+    } catch (err) {
+      LogUtils.debug('AlbumService.detailList', err)
+    }
+  }
+
   async get(id) {
     try {
       const path = `${this.apiUrl}/albums/${id}`
@@ -30,7 +44,7 @@ export default class AlbumService {
 
   async detail(id) {
     try {
-      const photos = await this.photos(id)
+      const photos = await this.albumPhotos(id)
       let responseModel = await this.get(id)
       responseModel = {
         ...responseModel,
@@ -43,13 +57,24 @@ export default class AlbumService {
     }
   }
 
-  async photos(id) {
+  async photos() {
+    try {
+      const path = `${this.apiUrl}/photos`
+      const responseModel = await axios(path)
+      return responseModel.data
+    } catch (err) {
+      LogUtils.debug('AlbumService.photos', err)
+      throw err
+    }
+  }
+
+  async albumPhotos(id) {
     try {
       const path = `${this.apiUrl}/albums/${id}/photos`
       const responseModel = await axios(path)
       return responseModel.data
     } catch (err) {
-      LogUtils.debug('AlbumService.photos', err)
+      LogUtils.debug('AlbumService.albumPhotos', err)
       throw err
     }
   }

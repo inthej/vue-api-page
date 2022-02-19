@@ -4,7 +4,6 @@
 
 <script>
 import UserService from '../../common/service/UserService'
-import LogUtils from '../../common/utils/LogUtils'
 import UserList from './components/UserList.vue'
 export default {
   components: {
@@ -22,12 +21,21 @@ export default {
         const response = await this.userService.detail(1)
         console.log(response)
       } catch (err) {
-        LogUtils.error(err)
+        console.error(err)
+      }
+    },
+    fetchDataList: async function () {
+      try {
+        const response = await this.userService.detailList()
+        console.log(response)
+      } catch (err) {
+        console.error(err)
       }
     }
   },
   created() {
     this.fetchData()
+    this.fetchDataList()
   }
 }
 </script>
