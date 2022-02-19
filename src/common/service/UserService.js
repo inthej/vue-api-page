@@ -6,7 +6,7 @@ export default class UserService {
     this.apiUrl = 'https://jsonplaceholder.typicode.com'
   }
 
-  static async list() {
+  async list() {
     try {
       const path = `${this.apiUrl}/users`
       const responseModel = await axios.get(path)
@@ -17,51 +17,66 @@ export default class UserService {
     }
   }
 
-  static async get(id) {
+  async get(id) {
     try {
       const path = `${this.apiUrl}/users/${id}`
       const responseModel = await axios.get(path)
-      return responseModel
+      return responseModel.data
     } catch (err) {
       LogUtils.debug('UserService.get', err)
       throw err
     }
   }
 
-  static async albums(id) {
+  async detail(id) {
+    try {
+      const albums = await this.albums(id)
+      const posts = await this.posts(id)
+      const todos = await this.todos(id)
+      let responseModel = await this.get(id)
+      responseModel = {
+        ...responseModel,
+        albums: albums,
+        posts: posts,
+        todos: todos,
+      }
+      return responseModel
+    } catch (err) {
+      LogUtils.debug('UserService.detail', err)
+      throw err
+    }
+  }
+
+  async albums(id) {
     try {
       const path = `${this.apiUrl}/users/${id}/albums`
       const responseModel = await axios.get(path)
-      return responseModel
+      return responseModel.data
     } catch (err) {
       LogUtils.debug('UserService.albums', err)
       throw err
     }
   }
 
-  static async todos(id) {
-    try {
-      const path = `${this.apiUrl}/users/${id}/todos`
-      const responseModel = await axios.get(path)
-      return responseModel
-    } catch (err) {
-      LogUtils.debug('UserService.todos', err)
-      throw err
-    }
-  }
-
-  static async posts(id) {
+  async posts(id) {
     try {
       const path = `${this.apiUrl}/users/${id}/posts`
       const responseModel = await axios.get(path)
-      return responseModel
+      return responseModel.data
     } catch (err) {
       LogUtils.debug('UserService.posts', err)
       throw err
     }
   }
 
-  static async detailList() {
-
+  async todos(id) {
+    try {
+      const path = `${this.apiUrl}/users/${id}/todos`
+      const responseModel = await axios.get(path)
+      return responseModel.data
+    } catch (err) {
+      LogUtils.debug('UserService.todos', err)
+      throw err
+    }
   }
 }

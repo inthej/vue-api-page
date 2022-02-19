@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import ApiService from '../../common/service/ApiService'
+import UserService from '../../common/service/UserService'
 import LogUtils from '../../common/utils/LogUtils'
 import UserList from './components/UserList.vue'
 export default {
@@ -12,14 +12,15 @@ export default {
   },
   data: function () {
     return {
-      list: []
+      list: [],
+      userService: new UserService()
     }
   },
   methods: {
     fetchData: async function () {
       try {
-        this.list = await ApiService.users()
-        LogUtils.debug(this.list)
+        const response = await this.userService.detail(1)
+        console.log(response)
       } catch (err) {
         LogUtils.error(err)
       }

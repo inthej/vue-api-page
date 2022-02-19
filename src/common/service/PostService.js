@@ -6,7 +6,7 @@ export default class PostService {
     this.apiUrl = 'https://jsonplaceholder.typicode.com'
   }
 
-  static async list() {
+  async list() {
     try {
       const path = `${this.apiUrl}/posts`
       const responseModel = await axios.get(path)
@@ -17,7 +17,7 @@ export default class PostService {
     }
   }
 
-  static async get(id) {
+  async get(id) {
     try {
       const path = `${this.apiUrl}/posts/${id}`
       const responseModel = await axios.get(path)
@@ -28,11 +28,26 @@ export default class PostService {
     }
   }
 
-  static async comments(id) {
+  async detail(id) {
+    try {
+      const comments = await this.comments(id)
+      let responseModel = await this.get(id)
+      responseModel = {
+        ...responseModel,
+        comments: comments
+      }
+      return responseModel
+    } catch (err) {
+      LogUtils.debug('PostService.detail', err)
+      throw err
+    }
+  }
+
+  async comments(id) {
     try {
       const path = `${this.apiUrl}/posts/${id}/comments`
       const responseModel = await axios.get(path)
-      return responseModel
+      return responseModel.data
     } catch (err) {
       LogUtils.debug('PostService.comments', err)
       throw err

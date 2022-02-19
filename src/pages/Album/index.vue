@@ -6,7 +6,7 @@
 </template>
 
 <script>
-import ApiService from '../../common/service/ApiService'
+import AlbumService from '../../common/service/AlbumService'
 import ValueUtils from'../../common/utils/ValueUtils'
 // import PhotoList from './components/PhotoList.vue'
 
@@ -16,7 +16,8 @@ export default {
   },
   data: function () {
     return {
-      list: []
+      list: [],
+      albumService: new AlbumService()
     }
   },
   // computed: {
@@ -38,65 +39,72 @@ export default {
   // },
   methods: {
     fetchData: async function () {
+      // try {
+      //   // 1. User 데이터
+      //   // {
+      //   //   "id": 1,
+      //   //   "name": "Leanne Graham",
+      //   //   "username": "Bret",
+      //   //   "email": "Sincere@april.biz",
+      //   //   "address": {
+      //   //     "street": "Kulas Light",
+      //   //     "suite": "Apt. 556",
+      //   //     "city": "Gwenborough",
+      //   //     "zipcode": "92998-3874",
+      //   //     "geo": {
+      //   //       "lat": "-37.3159",
+      //   //       "lng": "81.1496"
+      //   //     }
+      //   //   },
+      //   //   "phone": "1-770-736-8031 x56442",
+      //   //   "website": "hildegard.org",
+      //   //   "company": {
+      //   //     "name": "Romaguera-Crona",
+      //   //     "catchPhrase": "Multi-layered client-server neural-net",
+      //   //     "bs": "harness real-time e-markets"
+      //   //   }
+      //   // },
+      //   this.userMap = new Map()
+      //   this.users = await ApiService.users()
+      //   this.users.forEach(user => {
+      //     this.userMap.set(user.id, user)
+      //   })
+
+      //   // 2. album 데이터 가공
+      //   // {"userId": 1, "id": 1, "title": "quidem molestiae enim"},
+      //   this.albums = await ApiService.albums() 
+      //   this.userMap.forEach(user => {
+      //     const userAlbums = this.albums.filter(album => album.userId === user.id)
+      //     this.userMap.set(user.id, {...user, albums: userAlbums})
+      //   })
+
+      //   // 3. photo 가공
+      //   // {
+      //   //  "albumId": 1, 
+      //   //  "id": 1, 
+      //   //  "title": "accusamus beatae ad facilis cum similique qui sunt", 
+      //   //  "url": "https://via.placeholder.com/600/92c952", 
+      //   //  "thumbnailUrl": "https://via.placeholder.com/150/92c952" 
+      //   //  }
+      //   this.photos = await ApiService.photos()
+      //   this.userMap.forEach(user => user.albums.forEach(album => {
+      //     const albumPhotos = this.photos.filter(photo => photo.albumId === album.id)
+      //     this.userMap.set(user.id, {
+      //       ...user, 
+      //       albums: user.albums.map(item => ({...item, photos: albumPhotos}))
+      //     })
+      //   }))
+
+      //   console.log(this.list)
+      // } catch (err) {
+      //   console.log(err)
+      // }
+
       try {
-        // 1. User 데이터
-        // {
-        //   "id": 1,
-        //   "name": "Leanne Graham",
-        //   "username": "Bret",
-        //   "email": "Sincere@april.biz",
-        //   "address": {
-        //     "street": "Kulas Light",
-        //     "suite": "Apt. 556",
-        //     "city": "Gwenborough",
-        //     "zipcode": "92998-3874",
-        //     "geo": {
-        //       "lat": "-37.3159",
-        //       "lng": "81.1496"
-        //     }
-        //   },
-        //   "phone": "1-770-736-8031 x56442",
-        //   "website": "hildegard.org",
-        //   "company": {
-        //     "name": "Romaguera-Crona",
-        //     "catchPhrase": "Multi-layered client-server neural-net",
-        //     "bs": "harness real-time e-markets"
-        //   }
-        // },
-        this.userMap = new Map()
-        this.users = await ApiService.users()
-        this.users.forEach(user => {
-          this.userMap.set(user.id, user)
-        })
-
-        // 2. album 데이터 가공
-        // {"userId": 1, "id": 1, "title": "quidem molestiae enim"},
-        this.albums = await ApiService.albums() 
-        this.userMap.forEach(user => {
-          const userAlbums = this.albums.filter(album => album.userId === user.id)
-          this.userMap.set(user.id, {...user, albums: userAlbums})
-        })
-
-        // 3. photo 가공
-        // {
-        //  "albumId": 1, 
-        //  "id": 1, 
-        //  "title": "accusamus beatae ad facilis cum similique qui sunt", 
-        //  "url": "https://via.placeholder.com/600/92c952", 
-        //  "thumbnailUrl": "https://via.placeholder.com/150/92c952" 
-        //  }
-        this.photos = await ApiService.photos()
-        this.userMap.forEach(user => user.albums.forEach(album => {
-          const albumPhotos = this.photos.filter(photo => photo.albumId === album.id)
-          this.userMap.set(user.id, {
-            ...user, 
-            albums: user.albums.map(item => ({...item, photos: albumPhotos}))
-          })
-        }))
-
-        console.log(this.list)
+        const response = await this.albumService.detail(1)
+        console.log(response)
       } catch (err) {
-        console.log(err)
+        console.error(err)
       }
     },
     confirm: function () {
